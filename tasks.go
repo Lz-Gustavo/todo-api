@@ -26,15 +26,15 @@ func createTask(ctx context.Context, usr, desc string) error {
 		ID:   lastID,
 		Desc: desc,
 	}
-	return mongoInstance.Insert(ctx, t, usr)
+	return mongoInstance.Insert(ctx, usr, t)
 }
 
-func updateTask(ctx context.Context, usr string, id int, desc string) error {
-	return nil
+func updateTask(ctx context.Context, usr string, id int, desc, status string) error {
+	return mongoInstance.Update(ctx, usr, id, desc, status)
 }
 
 func deleteTask(ctx context.Context, usr string, id int) error {
-	return nil
+	return mongoInstance.Delete(ctx, usr, id)
 }
 
 func listTasks(ctx context.Context, usr string, status ...string) (*ResponseJSON, error) {
@@ -62,11 +62,9 @@ func listTasks(ctx context.Context, usr string, status ...string) (*ResponseJSON
 }
 
 func completeTask(ctx context.Context, usr string, id int) error {
-	// TODO: just set finished bool to true
-	return nil
+	return mongoInstance.UpdateFinished(ctx, usr, id, true)
 }
 
 func restoreTask(ctx context.Context, usr string, id int) error {
-	// TODO: just set finished bool to false
-	return nil
+	return mongoInstance.UpdateFinished(ctx, usr, id, false)
 }

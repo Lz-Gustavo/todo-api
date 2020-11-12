@@ -50,8 +50,8 @@ func (s *MongoInstance) Disconnect(ctx context.Context) error {
 	return s.con.Disconnect(ctx)
 }
 
-// Insert one document on the specified dbName and colName.
-func (s *MongoInstance) Insert(ctx context.Context, doc interface{}, col string) error {
+// Insert one document on the 'col' collection from defaultDB.
+func (s *MongoInstance) Insert(ctx context.Context, col string, doc interface{}) error {
 	db := s.con.Database(defaultDB).Collection(col)
 	raw, err := bson.Marshal(doc)
 	if err != nil {
@@ -59,6 +59,45 @@ func (s *MongoInstance) Insert(ctx context.Context, doc interface{}, col string)
 	}
 
 	_, err = db.InsertOne(ctx, raw)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Update ...
+//
+// TODO: for now both desc and status fields must always be updated. Modify behavior maybe?
+func (s *MongoInstance) Update(ctx context.Context, col string, taskID int, desc, status string) error {
+	filter := bson.D{{Key: "id", Value: taskID}}
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "desc", Value: desc},
+		}},
+		{Key: "$set", Value: bson.D{
+			{Key: "status", Value: status},
+		}},
+	}
+
+	db := s.con.Database(defaultDB).Collection(col)
+	_, err := db.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// UpdateFinished ...
+func (s *MongoInstance) UpdateFinished(ctx context.Context, col string, taskID int, finished bool) error {
+	filter := bson.D{{Key: "id", Value: taskID}}
+	update := bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "finished", Value: finished},
+		}},
+	}
+
+	db := s.con.Database(defaultDB).Collection(col)
+	_, err := db.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return err
 	}
@@ -84,6 +123,16 @@ func (s *MongoInstance) ListAll(ctx context.Context, col string) ([]Task, error)
 		return nil, err
 	}
 	return results, nil
+}
+
+// Delete ...
+func (s *MongoInstance) Delete(ctx context.Context, col string, taskID int) error {
+	db := s.con.Database(defaultDB).Collection(col)
+	_, err := db.DeleteMany(ctx, bson.D{{Key: "id", Value: taskID}})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // DeleteAll ...

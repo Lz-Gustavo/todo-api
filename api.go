@@ -2,7 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
+	"net/url"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -61,8 +64,13 @@ func tasksHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case "PUT":
-		// TODO: parse id and description
-		err := updateTask(r.Context(), usr, 0, "")
+		id, desc, status, err := parseUpdateArgs(args)
+		if err != nil {
+			http.Error(w, "error parsing args on update operation, err:"+err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		err = updateTask(r.Context(), usr, id, desc, status)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -98,4 +106,24 @@ func tasksRestoreHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO
+}
+
+func parseUpdateArgs(args url.Values) (int, string, string, error) {
+	if _, ok := args["id"]; !ok {
+		return 0, "", "", errors.New("no id informed for update operation")
+	}
+
+	id, err := strconv.Atoi(args["id"][0])
+	if err != nil {
+		return 0, "", "", errors.New("could not parse id value informed")
+	}
+
+	if _, ok := args["desc"]; !ok {
+		return 0, "", "", errors.New("no desc informed for update operation")
+	}
+
+	if _, ok := args["status"]; !ok {
+		return 0, "", "", errors.New("no status informed for update operation")
+	}
+	return id, args["desc"][0], args["status"][0], nil
 }
