@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -36,16 +38,34 @@ func tasksHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "POST":
-		// TODO: parse description from POST body, JSON maybe?
-		err := createTask(r.Context(), usr, "testandoae")
+		raw, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		t := &Task{}
+		err = json.Unmarshal(raw, t)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = insertTask(r.Context(), usr, *t)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 	case "GET":
-		// TODO: get all or with a certain status if requested, return JSON
-		tasks, err := listTasks(r.Context(), usr)
+		var status []string
+		if _, ok := args["status"]; ok {
+			// parse comma-separated list of status informed on query arg, eg:
+			//   url?status=a,b -> []string{"a", "b"}
+			status = strings.Split(args["status"][0], ",")
+		}
+
+		tasks, err := listTasks(r.Context(), usr, status...)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

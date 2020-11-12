@@ -104,6 +104,44 @@ func (s *MongoInstance) UpdateFinished(ctx context.Context, col string, taskID i
 	return nil
 }
 
+// Count returns the number of documents on a certain collection.
+func (s *MongoInstance) Count(ctx context.Context, col string) (int, error) {
+	db := s.con.Database(defaultDB).Collection(col)
+	n, err := db.CountDocuments(ctx, bson.D{{}})
+	if err != nil {
+		return 0, err
+	}
+
+	// will never overflow in this simple api
+	return int(n), nil
+}
+
+// List returns 'maxDocs' documents from 'col' collection with a certain status tag.
+func (s *MongoInstance) List(ctx context.Context, col string, status []string) ([]Task, error) {
+	findOptions := options.Find()
+	findOptions.SetLimit(maxDocs)
+	db := s.con.Database(defaultDB).Collection(col)
+
+	results := make([]Task, 0)
+	filter := bson.D{
+		{Key: "status", Value: bson.D{
+			{Key: "$in", Value: status},
+		}},
+	}
+
+	cur, err := db.Find(ctx, filter, findOptions)
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(ctx)
+
+	err = cur.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
 // ListAll returns 'maxDocs' document from specific collection.
 func (s *MongoInstance) ListAll(ctx context.Context, col string) ([]Task, error) {
 	findOptions := options.Find()

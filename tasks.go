@@ -12,20 +12,20 @@ type ResponseJSON struct {
 
 // Task ...
 type Task struct {
-	ID       int    `json:"id"`
-	Desc     string `json:"desc"`
-	Status   string `json:"status"`
-	Finished bool   `json:"finished"`
+	ID       int    `json:"id,omitempty"       bson:"id"`
+	Desc     string `json:"desc"               bson:"desc"`
+	Status   string `json:"status"             bson:"status"`
+	Finished bool   `json:"finished,omitempty" bson:"finished"`
 }
 
-func createTask(ctx context.Context, usr, desc string) error {
-	// TODO: First discover the num of elements on that col to set last id
-	lastID := 0
-
-	t := &Task{
-		ID:   lastID,
-		Desc: desc,
+func insertTask(ctx context.Context, usr string, t Task) error {
+	n, err := mongoInstance.Count(ctx, usr)
+	if err != nil {
+		return err
 	}
+
+	// col contains N tasks, indexed 1 to N. Insert next task with N+1 id
+	t.ID = n + 1
 	return mongoInstance.Insert(ctx, usr, t)
 }
 
@@ -38,10 +38,20 @@ func deleteTask(ctx context.Context, usr string, id int) error {
 }
 
 func listTasks(ctx context.Context, usr string, status ...string) (*ResponseJSON, error) {
-	// TODO: filter from status
-	docs, err := mongoInstance.ListAll(ctx, usr)
-	if err != nil {
-		return nil, err
+	var docs []Task
+	var err error
+
+	if len(status) == 0 {
+		docs, err = mongoInstance.ListAll(ctx, usr)
+		if err != nil {
+			return nil, err
+		}
+
+	} else {
+		docs, err = mongoInstance.List(ctx, usr, status)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	act := make([]Task, 0)
