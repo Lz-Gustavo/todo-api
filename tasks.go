@@ -12,10 +12,10 @@ type ResponseJSON struct {
 
 // Task ...
 type Task struct {
-	ID       int    `json:"id,omitempty"       bson:"id"`
-	Desc     string `json:"desc"               bson:"desc"`
-	Status   string `json:"status"             bson:"status"`
-	Finished bool   `json:"finished,omitempty" bson:"finished"`
+	ID       int    `json:"id,omitempty" bson:"id"`
+	Desc     string `json:"desc"         bson:"desc"`
+	Status   string `json:"status"       bson:"status"`
+	Finished bool   `json:"finished"     bson:"finished"`
 }
 
 func insertTask(ctx context.Context, usr string, t Task) error {

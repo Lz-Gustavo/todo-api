@@ -1,0 +1,612 @@
+{
+	"info": {
+		"_postman_id": "fc67bd02-74fa-47a6-83bd-f2a0d80cfb61",
+		"name": "TODO-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Read all tasks from user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo&status=andamento,finalizado",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8181",
+					"path": [
+						"tasks",
+						""
+					],
+					"query": [
+						{
+							"key": "usr",
+							"value": "ronaldo",
+							"description": "User owner of the TODO list"
+						},
+						{
+							"key": "status",
+							"value": "andamento,finalizado",
+							"description": "search only for tasks with these certain status. Returns all tasks if unset."
+						}
+					]
+				},
+				"description": "Retrieves all tasks mapped for a certain user.\n\nSupports a comma-separated list of **status** argument to filter for tasks of any status informed."
+			},
+			"response": [
+				{
+					"name": "Read all tasks from user",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8181",
+							"path": [
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "usr",
+									"value": "ronaldo",
+									"description": "User owner of the TODO list"
+								},
+								{
+									"key": "status",
+									"value": "andamento,finalizado",
+									"description": "search only for tasks with these certain status. Returns all tasks if unset.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 12 Nov 2020 17:39:43 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "306"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": "{\"active\":[{\"id\":2,\"desc\":\"passo2 da api\",\"status\":\"andamento\",\"finished\":false},{\"id\":3,\"desc\":\"passo3 da api\",\"status\":\"andamento\",\"finished\":false},{\"id\":4,\"desc\":\"passo4 da api\",\"status\":\"caminhando\",\"finished\":false}],\"finished\":[{\"id\":1,\"desc\":\"passo1 da api\",\"status\":\"finalizado\",\"finished\":true}]}"
+				},
+				{
+					"name": "Read all tasks from user",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo&status=andamento,finalizado",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8181",
+							"path": [
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "usr",
+									"value": "ronaldo",
+									"description": "User owner of the TODO list"
+								},
+								{
+									"key": "status",
+									"value": "andamento,finalizado",
+									"description": "search only for tasks with these certain status. Returns all tasks if unset."
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 12 Nov 2020 17:40:05 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "235"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"active\": [\n        {\n            \"id\": 2,\n            \"desc\": \"passo2 da api\",\n            \"status\": \"andamento\",\n            \"finished\": false\n        },\n        {\n            \"id\": 3,\n            \"desc\": \"passo3 da api\",\n            \"status\": \"andamento\",\n            \"finished\": false\n        }\n    ],\n    \"finished\": [\n        {\n            \"id\": 1,\n            \"desc\": \"passo1 da api\",\n            \"status\": \"finalizado\",\n            \"finished\": true\n        }\n    ]\n}"
+				},
+				{
+					"name": "Read all tasks from user",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8181",
+							"path": [
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "usr",
+									"value": "ronaldo",
+									"description": "User owner of the TODO list"
+								},
+								{
+									"key": "status",
+									"value": "andamento,finalizado",
+									"description": "search only for tasks with these certain status. Returns all tasks if unset.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 12 Nov 2020 17:46:58 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "305"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"active\": [\n        {\n            \"id\": 2,\n            \"desc\": \"testeupdate\",\n            \"status\": \"novostatus\",\n            \"finished\": false\n        },\n        {\n            \"id\": 3,\n            \"desc\": \"passo3 da api\",\n            \"status\": \"andamento\",\n            \"finished\": false\n        },\n        {\n            \"id\": 4,\n            \"desc\": \"passo4 da api\",\n            \"status\": \"caminhando\",\n            \"finished\": false\n        }\n    ],\n    \"finished\": [\n        {\n            \"id\": 1,\n            \"desc\": \"passo1 da api\",\n            \"status\": \"finalizado\",\n            \"finished\": true\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete task",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo&id=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8181",
+					"path": [
+						"tasks",
+						""
+					],
+					"query": [
+						{
+							"key": "usr",
+							"value": "ronaldo",
+							"description": "User owner of the TODO list"
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"description": "Task id to be deleted"
+						}
+					]
+				},
+				"description": "Delete a task with a specific id."
+			},
+			"response": []
+		},
+		{
+			"name": "Create new task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"desc\": \"passo1 da api\",\n    \"status\": \"andamento\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8181",
+					"path": [
+						"tasks",
+						""
+					],
+					"query": [
+						{
+							"key": "usr",
+							"value": "ronaldo",
+							"description": "User owner of the TODO list"
+						}
+					]
+				},
+				"description": "Insert a new task into a user's TODO list. Task IDs are automatically inserted. By default, a new task is always set as \"unfinished\"."
+			},
+			"response": [
+				{
+					"name": "Create new task",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"desc\": \"passo1 da api\",\n    \"status\": \"finalizado\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8181",
+							"path": [
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "usr",
+									"value": "ronaldo",
+									"description": "User owner of the TODO list"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 12 Nov 2020 17:37:24 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Update task",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo&id=1&desc=testeupdate&status=novostatus",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8181",
+					"path": [
+						"tasks",
+						""
+					],
+					"query": [
+						{
+							"key": "usr",
+							"value": "ronaldo",
+							"description": "User owner of the TODO list"
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"description": "Task id to be updated"
+						},
+						{
+							"key": "desc",
+							"value": "testeupdate",
+							"description": "New description"
+						},
+						{
+							"key": "status",
+							"value": "novostatus",
+							"description": "New status"
+						}
+					]
+				},
+				"description": "Updates a task description and status, matching the task id informed."
+			},
+			"response": [
+				{
+					"name": "Update task",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8181/tasks/?usr=ronaldo&id=2&desc=testeupdate&status=novostatus",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8181",
+							"path": [
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "usr",
+									"value": "ronaldo",
+									"description": "User owner of the TODO list"
+								},
+								{
+									"key": "id",
+									"value": "2",
+									"description": "Task id to be updated"
+								},
+								{
+									"key": "desc",
+									"value": "testeupdate",
+									"description": "New description"
+								},
+								{
+									"key": "status",
+									"value": "novostatus",
+									"description": "New status"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 12 Nov 2020 17:40:50 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Complete task",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8181/tasks/complete/?usr=ronaldo&id=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8181",
+					"path": [
+						"tasks",
+						"complete",
+						""
+					],
+					"query": [
+						{
+							"key": "usr",
+							"value": "ronaldo"
+						},
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Mark a certain task as finished."
+			},
+			"response": [
+				{
+					"name": "Complete task",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8181/tasks/complete/?usr=ronaldo&id=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8181",
+							"path": [
+								"tasks",
+								"complete",
+								""
+							],
+							"query": [
+								{
+									"key": "usr",
+									"value": "ronaldo"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 12 Nov 2020 17:38:47 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Restore task",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8181/tasks/restore/?usr=ronaldo&id=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8181",
+					"path": [
+						"tasks",
+						"restore",
+						""
+					],
+					"query": [
+						{
+							"key": "usr",
+							"value": "ronaldo"
+						},
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Restore a task state to unfinished."
+			},
+			"response": [
+				{
+					"name": "Restore task",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8181/tasks/restore/?usr=ronaldo&id=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8181",
+							"path": [
+								"tasks",
+								"restore",
+								""
+							],
+							"query": [
+								{
+									"key": "usr",
+									"value": "ronaldo"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 12 Nov 2020 17:41:51 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	],
+	"protocolProfileBehavior": {}
+}
