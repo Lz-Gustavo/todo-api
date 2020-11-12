@@ -8,14 +8,16 @@ API REST de uma aplicação de *TO-DO List* com integração ao MongoDB, permite
 
 ## Utilização
 1. Caso não possua uma instalação local do MongoDB, realize o deploy de um container Docker expondo a porta padrão ao host
+
 	```
 	docker pull mongo
 	docker run -p 27017:27017 mongo
 	```
 
 2. Compile e execute a aplicação pelo diretório raiz, ou execute o container Docker compartilhando rede com o host
+
 	```
-	docker build . -t todo-api 
+	docker build . -t todo-api
 	docker run --network=host todo-api
 	```
 
@@ -34,6 +36,7 @@ Além de descrita aqui, a documentação completa da API encontra-se disponível
 * **POST** ```localhost:8181/tasks/```
 	- ```usr```: especifica o usuário dono das tasks.
 	- Body com arquivo JSON do tipo:
+
 		```json
 		{
     		"desc": "passo1 da api",

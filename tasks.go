@@ -4,13 +4,13 @@ import (
 	"context"
 )
 
-// ResponseJSON ...
+// ResponseJSON defines the JSON response format for the /tasks endpoint.
 type ResponseJSON struct {
 	ActiveTasks   []Task `json:"active"`
 	FinishedTasks []Task `json:"finished"`
 }
 
-// Task ...
+// Task structure maps the BSON document format and JSON elements within response.
 type Task struct {
 	ID       int    `json:"id,omitempty" bson:"id"`
 	Desc     string `json:"desc"         bson:"desc"`

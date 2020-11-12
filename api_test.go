@@ -12,7 +12,26 @@ func TestAPIReponse(t *testing.T) {
 		url          string
 		expectedCode int
 	}{
-		// TODO: ...
+		{
+			"/tasks/?usr=ronaldo",
+			http.StatusOK,
+		},
+		{
+			"/tasks/?usr=ronaldo&status=andamento,finalizado",
+			http.StatusOK,
+		},
+		{
+			"/tasks/complete/?usr=ronaldo&id=1",
+			http.StatusOK,
+		},
+		{
+			"/tasks/restore/?usr=ronaldo&id=1",
+			http.StatusOK,
+		},
+		{
+			"/tasks/?notparsed=test",
+			http.StatusBadRequest,
+		},
 	}
 
 	for _, tc := range testCases {

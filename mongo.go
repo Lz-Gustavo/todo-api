@@ -11,21 +11,19 @@ import (
 
 const (
 	mongoURL  = "mongodb://localhost:27017"
-	maxDocs   = 10
+	maxDocs   = 50
 	defaultDB = "tasks"
 )
 
-// MongoInstance ...
+// MongoInstance stores a single and shared instance established during service initilization.
+// A mongo.Client already implements a pool of connections to a MongoDB deployment by default,
+// beign safe for concurrent use by multiple goroutines.
 type MongoInstance struct {
 	con *mongo.Client
 }
 
-// NewMongoInstance ...
-func NewMongoInstance() *MongoInstance {
-	return &MongoInstance{}
-}
-
-// Connect to MongoDB.
+// Connect establishes connection to MongoDB, testing connection with a 5sec timeout, returning
+// an error if failed on ping.
 func (s *MongoInstance) Connect(ctx context.Context) error {
 	clientOptions := options.Client().ApplyURI(mongoURL)
 	var err error
@@ -34,7 +32,7 @@ func (s *MongoInstance) Connect(ctx context.Context) error {
 		return err
 	}
 
-	// Check the connection with 5s timeout
+	// check the connection with 5s timeout
 	c, cn := context.WithTimeout(ctx, 5*time.Second)
 	defer cn()
 
@@ -65,9 +63,7 @@ func (s *MongoInstance) Insert(ctx context.Context, col string, doc interface{})
 	return nil
 }
 
-// Update ...
-//
-// TODO: for now both desc and status fields must always be updated. Modify behavior maybe?
+// Update a document matching a specific 'id'. Both 'desc' and 'status' fields must always be updated.
 func (s *MongoInstance) Update(ctx context.Context, col string, taskID int, desc, status string) error {
 	filter := bson.D{{Key: "id", Value: taskID}}
 	update := bson.D{
@@ -87,7 +83,7 @@ func (s *MongoInstance) Update(ctx context.Context, col string, taskID int, desc
 	return nil
 }
 
-// UpdateFinished ...
+// UpdateFinished updates the 'finished' field of a task matching a specific 'id'.
 func (s *MongoInstance) UpdateFinished(ctx context.Context, col string, taskID int, finished bool) error {
 	filter := bson.D{{Key: "id", Value: taskID}}
 	update := bson.D{
@@ -163,17 +159,17 @@ func (s *MongoInstance) ListAll(ctx context.Context, col string) ([]Task, error)
 	return results, nil
 }
 
-// Delete ...
+// Delete at most one task matching a certain 'id' from 'col' collection.
 func (s *MongoInstance) Delete(ctx context.Context, col string, taskID int) error {
 	db := s.con.Database(defaultDB).Collection(col)
-	_, err := db.DeleteMany(ctx, bson.D{{Key: "id", Value: taskID}})
+	_, err := db.DeleteOne(ctx, bson.D{{Key: "id", Value: taskID}})
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// DeleteAll ...
+// DeleteAll deletes all documents from 'col' collection.
 func (s *MongoInstance) DeleteAll(ctx context.Context, col string) error {
 	db := s.con.Database(defaultDB).Collection(col)
 	_, err := db.DeleteMany(ctx, bson.D{{}})
