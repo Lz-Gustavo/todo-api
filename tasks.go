@@ -1,13 +1,21 @@
 package main
 
-import "context"
+import (
+	"context"
+)
+
+// ResponseJSON ...
+type ResponseJSON struct {
+	ActiveTasks   []Task `json:"active"`
+	FinishedTasks []Task `json:"finished"`
+}
 
 // Task ...
 type Task struct {
-	id       int
-	desc     string
-	status   string
-	finished bool
+	ID       int    `json:"id"`
+	Desc     string `json:"desc"`
+	Status   string `json:"status"`
+	Finished bool   `json:"finished"`
 }
 
 func createTask(ctx context.Context, usr, desc string) error {
@@ -15,24 +23,50 @@ func createTask(ctx context.Context, usr, desc string) error {
 	lastID := 0
 
 	t := &Task{
-		id:   lastID,
-		desc: desc,
+		ID:   lastID,
+		Desc: desc,
 	}
 	return mongoInstance.Insert(ctx, t, usr)
 }
 
-func updateTask(ctx context.Context, usr string, id int, desc string) {}
-
-func deleteTask(ctx context.Context, usr string) {}
-
-func listTasks(ctx context.Context, usr string) {
-	// TODO: separate finished and unfinished ones
+func updateTask(ctx context.Context, usr string, id int, desc string) error {
+	return nil
 }
 
-func completeTask(ctx context.Context, usr string, id int) {
+func deleteTask(ctx context.Context, usr string, id int) error {
+	return nil
+}
+
+func listTasks(ctx context.Context, usr string, status ...string) (*ResponseJSON, error) {
+	// TODO: filter from status
+	docs, err := mongoInstance.ListAll(ctx, usr)
+	if err != nil {
+		return nil, err
+	}
+
+	act := make([]Task, 0)
+	fin := make([]Task, 0)
+
+	for _, t := range docs {
+		if t.Finished {
+			fin = append(fin, t)
+		} else {
+			act = append(act, t)
+		}
+	}
+
+	return &ResponseJSON{
+		ActiveTasks:   act,
+		FinishedTasks: fin,
+	}, nil
+}
+
+func completeTask(ctx context.Context, usr string, id int) error {
 	// TODO: just set finished bool to true
+	return nil
 }
 
-func restoreTask(ctx context.Context, usr string, id int) {
+func restoreTask(ctx context.Context, usr string, id int) error {
 	// TODO: just set finished bool to false
+	return nil
 }

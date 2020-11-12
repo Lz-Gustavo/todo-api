@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -10,7 +11,7 @@ import (
 
 const (
 	mongoURL  = "mongodb://localhost:27017"
-	maxDocs   = 5
+	maxDocs   = 10
 	defaultDB = "tasks"
 )
 
@@ -33,8 +34,11 @@ func (s *MongoInstance) Connect(ctx context.Context) error {
 		return err
 	}
 
-	// Check the connection
-	err = s.con.Ping(ctx, nil)
+	// Check the connection with 5s timeout
+	c, cn := context.WithTimeout(ctx, 5*time.Second)
+	defer cn()
+
+	err = s.con.Ping(c, nil)
 	if err != nil {
 		return err
 	}
@@ -48,28 +52,28 @@ func (s *MongoInstance) Disconnect(ctx context.Context) error {
 
 // Insert one document on the specified dbName and colName.
 func (s *MongoInstance) Insert(ctx context.Context, doc interface{}, col string) error {
-	collection := s.con.Database(defaultDB).Collection(col)
-	encodeData, err := bson.Marshal(doc)
+	db := s.con.Database(defaultDB).Collection(col)
+	raw, err := bson.Marshal(doc)
 	if err != nil {
 		return err
 	}
 
-	_, err = collection.InsertOne(ctx, encodeData)
+	_, err = db.InsertOne(ctx, raw)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// All returns 'maxDocs' document from specific collection.
-func (s *MongoInstance) All(ctx context.Context, col string) ([]interface{}, error) {
+// ListAll returns 'maxDocs' document from specific collection.
+func (s *MongoInstance) ListAll(ctx context.Context, col string) ([]Task, error) {
 	findOptions := options.Find()
 	findOptions.SetLimit(maxDocs)
-	var results []interface{}
-	collection := s.con.Database(defaultDB).Collection(col)
+	db := s.con.Database(defaultDB).Collection(col)
+	results := make([]Task, 0)
 
 	// Passing bson.D{{}} as the filter matches all documents in the collection
-	cur, err := collection.Find(ctx, bson.D{{}}, findOptions)
+	cur, err := db.Find(ctx, bson.D{{}}, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +88,8 @@ func (s *MongoInstance) All(ctx context.Context, col string) ([]interface{}, err
 
 // DeleteAll ...
 func (s *MongoInstance) DeleteAll(ctx context.Context, col string) error {
-	collection := s.con.Database(defaultDB).Collection(col)
-	_, err := collection.DeleteMany(ctx, bson.D{{}})
+	db := s.con.Database(defaultDB).Collection(col)
+	_, err := db.DeleteMany(ctx, bson.D{{}})
 	if err != nil {
 		return err
 	}

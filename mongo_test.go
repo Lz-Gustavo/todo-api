@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"testing"
+	"time"
 )
 
 func TestDBCon(t *testing.T) {
 	inst := &MongoInstance{}
-	ctx := context.TODO()
+	ctx, cn := context.WithTimeout(context.TODO(), time.Second)
+	defer cn()
 
 	inst.Connect(ctx)
 	err := inst.Disconnect(ctx)
